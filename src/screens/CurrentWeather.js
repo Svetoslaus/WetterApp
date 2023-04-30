@@ -2,13 +2,15 @@ import React from "react";
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; 
 import RowText from "../components/RowText";
+import { weatherType } from "../utilities/weatherType";
+import { Feather } from '@expo/vector-icons'
 
-const CurrentWeather = () => {
+const CurrentWeather = ({ weatherData }) => {
 
   const { 
     wrapper,
     container,
-    temp,
+    tempStyles,
     feels,
     highLow,
     highLowWrapper,
@@ -16,31 +18,40 @@ const CurrentWeather = () => {
     description,
     message,
    } = styles
-  return (
-    <SafeAreaView style={wrapper}>
-    <View style={ container }> 
-      <FontAwesome name="sun-o" size={100} color="black" />
-      <Text style={ temp }>6</Text>
-      <Text style={ feels }>Feels like 5</Text>
 
+  const { 
+    main: { temp, feels_like, temp_max, temp_min},
+    weather
+  } = weatherData
+
+  const weatherCondition = weather[0].main
+  return (
+    <SafeAreaView style={[wrapper, { backgroundColor: weatherType[weatherCondition].backgroundColor}
+    ]}
+    >
+    <View style={ container }> 
+      <Feather
+       name={weatherType[weatherCondition].icon}
+       size={100}
+       color="white"
+      />
+      <Text style={ tempStyles }>{temp}</Text>
+      <Text style={ feels }>{`Feels like ${feels_like}`}</Text>
       <RowText 
-      message1={'High: 8'} 
-      message2={'Low: 6'} c
+      message1={`High: ${temp_max}`} 
+      message2={`Low: ${temp_min}`}
       containerStyles={highLowWrapper} 
       message1Styles={highLow}
       message2Styles={highLow}
       />
-
-
+      </View>
       <RowText 
-      message1={'It is sunny'} 
-      message2={'It is perfect to wear your t-shirt'} 
+      message1={weather[0].description} 
+      message2={weatherType[weatherCondition].message} 
       containerStyles={bodyWrapper}
       message1Styles={description}
       message2Styles={message}      
       />
-
-    </View>
     </SafeAreaView>
   )
 }
@@ -56,7 +67,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'pink'
    
   },
-  temp: {
+  tempStyles: {
     color: 'black',
     fontSize: 48
   },

@@ -1,67 +1,45 @@
-import React from "react"
-import CurrentWeather from './src/screens/CurrentWeather'
-import City from './src/screens/City'
-import UpcomingWeather from './src/screens/UpcomingWeather'
-import { NavigationContainer } from '@react-navigation/native'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { Feather } from '@expo/vector-icons'
+import React, { useState, useEffect } from "react"
+import { NavigationContainer} from '@react-navigation/native'
+import Tabs from "./src/components/Tabs"
+import { ActivityIndicator, View, StyleSheet } from "react-native"
+import * as Location from 'expo-location'
+import { useGetWeather } from './src/hooks/useGetWeather'
+import ErrorItem from "./src/components/ErrorItem"
 
-const Tab = createBottomTabNavigator()
+//import { WETTER_API_KEY } from '@env' 
 
 const App = () => {
+  const [loading, error, weather] = useGetWeather()
+
+ 
+
+  if (weather && weather.list && !loading){
+    return (
+      <NavigationContainer>
+        <Tabs weather={weather}/>
+      </NavigationContainer>
+    )
+  }
   
+ 
   return (
-  <NavigationContainer>
-    <Tab.Navigator
-    screenOptions={{
-      tabBarActiveTintColor: 'purple',
-      tabBarInactiveTintColor: 'grey'
-    }}
-    >
-      <Tab.Screen 
-      name={'City'} 
-      component={City}
-      options={{
-        tabBarIcon: ({focused}) => (
-        <Feather
-        name={'home'}
-        size={25}
-        color={focused ? 'purple' : 'black'}
-        />
-        )
-      }}/>
-      <Tab.Screen 
-      name={'Upcoming'} 
-      component={UpcomingWeather}
-      options={{
-        tabBarIcon: ({focused}) => (
-          <Feather
-          name={'clock'}
-          size={25}
-          color={focused ? 'purple' : 'black'}
-          />
-        )
-      }}
-      />
-      <Tab.Screen 
-      name={'Current'} 
-      component={CurrentWeather}
-      options={{
-        tabBarIcon: ({focused}) => (
-          <Feather
-          name={'droplet'}
-          size={25}
-          color={focused ? 'purple' : 'black'}
-          />
-        )
-      }}
-      />
-   
-    </Tab.Navigator>
-  </NavigationContainer>
+      <View style={styles.container}>
+        {error ? 
+        (<ErrorItem/>) 
+        :
+      (<ActivityIndicator size={'large'} color={'blue'}/>) 
+      }
+      </View>
   )
 }
 
 
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    flex: 1
+  }
+})
 
 export default App

@@ -8,7 +8,7 @@ const RowText = (props) => {
     message1, 
     message2, 
     containerStyles, 
-    message1Styles, 
+    message1Styles,    
     message2Styles 
 } = props
 
