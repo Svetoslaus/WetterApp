@@ -2,7 +2,7 @@ import React from 'react'
 import { SafeAreaView, StyleSheet, Text, FlatList, View, StatusBar, ImageBackground } from 'react-native'
 import ListItem from '../components/ListItem'
 
-const DATA = [
+/* const DATA = [
     { 
      dt_text: "2023-04-24 12:00:00",
      main: {
@@ -39,9 +39,9 @@ const DATA = [
         }
      ]
     }
-]
+] */
 
-const Item = (props) => {
+/* const Item = (props) => {
    const { dt_text, min, max, condition } = props
     return (
       <View style={styles.item}>
@@ -52,9 +52,9 @@ const Item = (props) => {
         
       </View>
    )
-}
+} */
 
-const UpcomingWeather = () => {
+const UpcomingWeather = ({weatherData}) => {
     const renderItem = ({ item }) => (
         <ListItem 
         condition={item.weather[0].main}
@@ -72,9 +72,9 @@ const UpcomingWeather = () => {
             source={require('../../assets/upcoming-background.jpg')} 
             style={image}
             >
-            <Text>Upcoming Weather</Text>
+            {/* <Text>Upcoming Weather</Text> */}
             <FlatList
-                data={DATA}
+                data={weatherData}
                 renderItem={renderItem}
                 keyExtractor={(item)=> item.dt_text }
                 
